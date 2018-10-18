@@ -1,0 +1,104 @@
+version: "3"
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+
+  web1:
+    image: evi0s/node-backend
+    container_name: web1
+    restart: always
+    volumes:
+      - $PWD/data/log:/app/log
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - DBHOST=mongo
+      - DBNAME=kqummp
+      - REDISHOST=redis
+      - LISTENPORT=8080
+
+  web2:
+    image: evi0s/node-backend
+    container_name: web2
+    restart: always
+    volumes:
+      - $PWD/data/log:/app/log
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - DBHOST=mongo
+      - DBNAME=kqummp
+      - REDISHOST=redis
+      - LISTENPORT=8080
+
+  web3:
+    image: evi0s/node-backend
+    container_name: web3
+    restart: always
+    volumes:
+      - $PWD/data/log:/app/log
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - DBHOST=mongo
+      - DBNAME=kqummp
+      - REDISHOST=redis
+      - LISTENPORT=8080
+
+  web4:
+    image: evi0s/node-backend
+    container_name: web4
+    restart: always
+    volumes:
+      - $PWD/data/log:/app/log
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - DBHOST=mongo
+      - DBNAME=kqummp
+      - REDISHOST=redis
+      - LISTENPORT=8080
+
+  web5:
+    image: evi0s/node-backend
+    container_name: web5
+    restart: always
+    volumes:
+      - $PWD/data/log:/app/log
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - DBHOST=mongo
+      - DBNAME=kqummp
+      - REDISHOST=redis
+      - LISTENPORT=8080
+
+  nginx:
+    image: evi0s/openresty-waf-node
+    container_name: nginx
+    restart: always
+    depends_on:
+      - web1
+      - web2
+      - web3
+      - web4
+      - web5
+    volumes:
+      - $PWD/ssl/:/usr/local/openresty/nginx/ssl:ro
+      - $PWD/html/:/usr/local/openresty/nginx/html
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
